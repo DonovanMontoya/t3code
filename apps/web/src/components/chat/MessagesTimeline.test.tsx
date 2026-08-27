@@ -1330,4 +1330,40 @@ describe("MessagesTimeline", () => {
     // Ordinary tool failures render muted, not red.
     expect(markup).not.toContain("text-destructive");
   });
+
+  it("keeps the red treatment for severe orchestration failures", () => {
+    const markup = renderToStaticMarkup(
+      <MessagesTimeline
+        {...buildProps()}
+        timelineEntries={[
+          {
+            id: "entry-info",
+            kind: "work",
+            createdAt: "2026-03-17T19:12:27.000Z",
+            entry: {
+              id: "work-info",
+              createdAt: "2026-03-17T19:12:27.000Z",
+              label: "Status updated",
+              tone: "info",
+            },
+          },
+          {
+            id: "entry-turn-failed",
+            kind: "work",
+            createdAt: "2026-03-17T19:12:28.000Z",
+            entry: {
+              id: "work-turn-failed",
+              createdAt: "2026-03-17T19:12:28.000Z",
+              label: "Provider turn start failed",
+              tone: "error",
+              sourceActivityKind: "provider.turn.start.failed",
+            },
+          },
+        ]}
+      />,
+    );
+
+    expect(markup).toContain("lucide-x");
+    expect(markup).toContain("text-destructive");
+  });
 });

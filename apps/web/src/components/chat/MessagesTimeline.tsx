@@ -35,6 +35,7 @@ import { FileDiff } from "@pierre/diffs/react";
 import {
   deriveTimelineEntries,
   workEntryDisplayIndicatesToolFailure,
+  workEntrySignalsSevereFailure,
   workLogEntryIsToolLike,
 } from "../../session-logic";
 import { type TurnDiffSummary } from "../../types";
@@ -2616,7 +2617,7 @@ const PlainWorkEntryRow = memo(function PlainWorkEntryRow(props: {
   const canExpand = expandedBody !== null;
   const showDestructiveRowStyle =
     showFailedIndicator &&
-    (workEntry.sourceActivityKind === "runtime.error" || !workLogEntryIsToolLike(workEntry));
+    (workEntrySignalsSevereFailure(workEntry) || !workLogEntryIsToolLike(workEntry));
   // Ordinary tool failures stay muted; only runtime errors and warnings get
   // color. The red treatment is reserved for severe failures.
   const iconWrapperClass = cn(
